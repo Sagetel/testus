@@ -33,7 +33,6 @@ export function ItemsGrid() {
           {...props}
         />
       ))}
-
       <Popup settings={popupSettings} setSettings={setPopupSettings} />
     </Container>
   );

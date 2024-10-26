@@ -6,6 +6,7 @@ export function AppState() {
   const { isFetching, isError } = useData();
 
   if (isError) {
+    console.log(isError);
     return (
       <AppStateContainer>
         <Text>An error has occurred. Try other search parameters.</Text>

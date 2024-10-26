@@ -4,28 +4,19 @@ import { useData } from './providers';
 
 export function Pagination() {
   const [pages, setPages] = useState([]);
-  const { apiURL, info, activePage, setActivePage, setApiURL } = useData();
+  const { info, activePage, setActivePage } = useData();
+
+  useEffect(() => {
+    const createdPages = Array.from({ length: info.pages }, (_, i) => i + 1);
+    setPages(createdPages);
+  }, [info]);
 
   const pageClickHandler = (index) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setActivePage(index);
-    setApiURL(pages[index]);
   };
 
-  useEffect(() => {
-    const createdPages = Array.from({ length: info.pages }, (_, i) => {
-      const URLWithPage = new URL(apiURL);
-
-      URLWithPage.searchParams.set('page', i + 1);
-
-      return URLWithPage;
-    });
-
-    setPages(createdPages);
-  }, [apiURL, info]);
-
   if (pages.length <= 1) return null;
-
   return (
     <StyledPagination>
       {pages[activePage - 1] && (
@@ -54,7 +45,9 @@ export function Pagination() {
           {activePage + 1 !== pages.length - 1 && (
             <>
               <Ellipsis>...</Ellipsis>
-              <Page onClick={() => pageClickHandler(pages.length)}>Last »</Page>
+              <Page onClick={() => pageClickHandler(pages.length - 1)}>
+                Last &raquo;
+              </Page>
             </>
           )}
         </>
@@ -79,14 +72,6 @@ const Page = styled.span`
   &:hover {
     color: #83bf46;
   }
-`;
-
-const Container = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  justify-items: center;
-  gap: 30px;
 `;
 
 const Ellipsis = styled(Page)`
